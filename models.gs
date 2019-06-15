@@ -141,8 +141,8 @@ function helpModel(){
     return msHelp;
 }
 
-//単語の文字列をリストとして取得してViewに返す関数
-function listModel(){
+//単語の文字列をリストとして全件取得してViewに返す関数
+function listAllModel(){
     var words = msList;
     words += '-'+wordList[wordList.length-1]+ "　";
     var cnt = strCount(wordList[wordList.length-1].toString())+4;
@@ -155,4 +155,29 @@ function listModel(){
         words += '-'+wordList[i] + "　";
     }
     return words;
+}
+
+//単語の文字列をリストとして最大50件取得してViewに返す関数
+function listDefaultModel(){
+    var displaycnt = listcnt*50;
+    var words = msListDefault+displaycnt+ "〜"+(displaycnt+50) +msDisplayCnt;
+    var displayNumber = 1;
+    words += '-'+wordList[wordList.length-displaycnt-1]+ "　";
+    var cnt = strCount(wordList[wordList.length-1].toString())+4;
+    for(var i = wordList.length-displaycnt-2; i > 1 ;i--){
+        if(displayNumber == 50){
+            dictSheet.getRange("D2").setValue('L');
+            dictSheet.getRange("D3").setValue(listcnt+1);
+            return words + msNextWord;
+        }
+        cnt += strCount(wordList[i].toString())+4;
+        if(cnt >= 40){
+            words += String.fromCharCode(10);
+            cnt = strCount(wordList[i].toString()) + 4;
+        }
+        words += '-'+wordList[i] + "　";
+        displayNumber += 1;
+    }
+    dictSheet.getRange("D3").setValue(0);
+    return words+String.fromCharCode(10)+displayNumber+msDisplayResultCnt;
 }

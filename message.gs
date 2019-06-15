@@ -14,3 +14,7 @@ var msList = messageSheet.getRange("A12").getValue();
 var msRemove = messageSheet.getRange("A13").getValue();
 var msNoRemove = messageSheet.getRange("A14").getValue();
 var msNoUseWord = messageSheet.getRange("A15").getValue(); 
+var msNextWord = messageSheet.getRange("A16").getValue(); 
+var msDisplayCnt = messageSheet.getRange("A17").getValue(); 
+var msDisplayResultCnt = messageSheet.getRange("A18").getValue();
+var msListDefault = messageSheet.getRange("A19").getValue();

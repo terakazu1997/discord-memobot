@@ -12,11 +12,21 @@ function controller() {
     keyword=dictSheet.getRange("A2").getValue();
     wordList = dictSheet.getRange(1,2,lastRow).getValues();
     overwriteFlg = dictSheet.getRange("D2").getValue();
+    listcnt = dictSheet.getRange("D3").getValue();
     if(keyword === ""){
         return;
     }
-    keyword = keywordSplit(keyword);
     dictSheet.getRange(2, 1).clear();
+    if (overwriteFlg === "L"){
+      if(keyword === 'n'){
+           listDefaultView();
+           return;
+      }
+      dictSheet.getRange("D2").setValue('F');
+      dictSheet.getRange("D3").setValue(0);
+      listcnt = 0;
+    }
+    keyword = keywordSplit(keyword);
     if(keyword.slice(0,3) === "url"){
         urlCheckView(keyword);
         return;
@@ -25,20 +35,25 @@ function controller() {
         sendToDiscordModel(msNoUseWord);
         return;
     }
-    if(keyword == "?help" || keyword == "？help"|| keyword == "help"){
-        helpView();
-        return;
-    }
+
     if(overwriteFlg == "I"){
         insertView(keyword);
         return;
     }
-     if(overwriteFlg.slice(0,1) == "U"){
+    if(overwriteFlg.slice(0,1) == "U"){
         updateView(keyword);
         return;
     }
+    if(keyword == "?help" || keyword == "？help"|| keyword == "help"){
+        helpView();
+        return;
+    }
+    if(keyword == "?list -a" || keyword=="？lｉst -a" || keyword == "？list -a"|| keyword == "list -a"){
+        listAllView();
+        return;
+    }
     if(keyword == "?list" || keyword=="？lｉst" || keyword == "？list"|| keyword == "list"){
-        listView();
+        listDefaultView();
         return;
     }
     if(keyword.slice(0,3) == "rm　" || keyword.slice(0,3) == "rm "){
