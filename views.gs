@@ -6,11 +6,11 @@
 * 2.Modelから受け取ったメッセージを引数にし、sendToModel関数を呼び出し、Discordに送る
 * 3.Controllerに処理の終了としてreturnを返す
 *
-* models.gs 
+* views.gs 
 */
 
 function urlCheckView(keyword){
-　　　　　　　　var urlJudgeMessage= urlJudgeModel(keyword);
+    var urlJudgeMessage= urlJudgeModel(keyword);
     sendToDiscordModel(urlJudgeMessage);
     return;
 }
@@ -42,7 +42,7 @@ function updateCheckView(keyword){
 function wordMeanView(keyword){
     var wordMeanMessage = wordMeanModel(keyword);
     if(wordMeanMessage === false){
-    　　　　　　　　return false;
+        return false;
     }
     sendToDiscordModel(wordMeanMessage);
     return true;
@@ -60,7 +60,7 @@ function helpView(){
     return;
 }
 
-function  listView(){
+function listView(){
     var listMessage = listModel();
     sendToDiscordModel(listMessage);
     return;

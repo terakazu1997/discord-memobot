@@ -45,7 +45,7 @@ function urlJudgeModel(keyword){
         dictSheet.getRange("D2").setValue('F');
         return msWord+dictSheet.getRange(lastRow,2).getValue()+msInsertUrl+keyword;
     }else {
-       return msNGUrl;
+        return msNGUrl;
     }
 }
 
@@ -55,9 +55,9 @@ function urlJudgeModel(keyword){
 *  3.Viewに追加した単語と意味のメッセージを返す
 */
 function insertModel(keyword){
-   dictSheet.getRange(lastRow, 3).setValue(keyword);
-   dictSheet.getRange("D2").setValue('F');
-   return  msWord+dictSheet.getRange(lastRow,2).getValue()+msInsertMean+keyword;
+    dictSheet.getRange(lastRow, 3).setValue(keyword);
+    dictSheet.getRange("D2").setValue('F');
+    return msWord+dictSheet.getRange(lastRow,2).getValue()+msInsertMean+keyword;
 }
 
 /*Discordからスプレッドシートに追加された文字列の意味を更新する関数
@@ -97,14 +97,14 @@ function updateCheckModel(keyword){
     　　　　　　　　return msNoUpWord;
     }
     for(var i =0; i< wordList.length; i++){
-    　　　　　　　　checkWord = wordList[i].toString();
-       　　checkWord = checkWord.replace(/,/g,'');
-       　　if(checkWord === upword){
-        　　　　　　　　dictSheet.getRange("D2").setValue('U'+(i+1));
-           　　return upword+msUpWord;
-       　　}
-　　　　　　　　}
- 　　　　　　dictSheet.getRange("D2").setValue('U'+(i+1));
+        checkWord = wordList[i].toString();
+        checkWord = checkWord.replace(/,/g,'');
+        if(checkWord === upword){
+            dictSheet.getRange("D2").setValue('U'+(i+1));
+            return upword+msUpWord;
+        }
+    }
+    dictSheet.getRange("D2").setValue('U'+(i+1));
     dictSheet.getRange(i+1,2).setValue(upword);
     return upword+msInsertWord;
 }
@@ -112,8 +112,8 @@ function updateCheckModel(keyword){
 /*Discordからスプレッドシートに追加された文字列が追加対象か、追加対象じゃないかをチェックする関数
 */
 function insertCheckModel(keyword){
-　　　　　　　　if(keyword.length >= 39){
-    　　　　　　　　return msNoInsertWord;
+    if(keyword.length >= 39){
+        return msNoInsertWord;
     }
     dictSheet.getRange(lastRow+1, 2).setValue(keyword);
     dictSheet.getRange(2,4).setValue('I');
@@ -126,19 +126,19 @@ function wordMeanModel(keyword){
     var checkWord = "";
     var mean;
     for(var i =0; i< wordList.length; i++){
-       checkWord = wordList[i].toString();
-       checkWord = checkWord.replace(/,/g,'');
-       if(checkWord === keyword){
-           mean = dictSheet.getRange(i+1, 3).getValue();
-           return msWord+keyword+msMean+mean;
-       }
+        checkWord = wordList[i].toString();
+        checkWord = checkWord.replace(/,/g,'');
+        if(checkWord === keyword){
+            mean = dictSheet.getRange(i+1, 3).getValue();
+            return msWord+keyword+msMean+mean;
+        }
     }
     return false;
 }
 
 //helpメッセージを取得し、Viewに返す関数
 function helpModel(){
-   　　return msHelp;
+    return msHelp;
 }
 
 //単語の文字列をリストとして取得してViewに返す関数

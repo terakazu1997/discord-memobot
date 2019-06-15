@@ -6,6 +6,6 @@
 */
 
 function getSpreadSheet() {
-　　　　　　　　controller();
+    controller();
     return;
 }
