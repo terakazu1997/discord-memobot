@@ -48,11 +48,11 @@ function controller() {
         helpView();
         return;
     }
-    if(keyword == "?list -a" || keyword=="？lｉst -a" || keyword == "？list -a"|| keyword == "list -a"){
+    if(keyword == "?list -a" || keyword=="？lｉst -a" || keyword == "？list -a"|| keyword == "list -a"||keyword == "?ls -a" || keyword=="？ls -a" || keyword == "？ls -a"|| keyword == "ls -a"){
         listAllView();
         return;
     }
-    if(keyword == "?list" || keyword=="？lｉst" || keyword == "？list"|| keyword == "list"){
+    if(keyword == "?ls" || keyword=="？ls" || keyword == "？ls"|| keyword == "ls"||keyword == "?list" || keyword=="？lｉst" || keyword == "？list"|| keyword == "list"){
         listDefaultView();
         return;
     }
