@@ -11,3 +11,4 @@ var lastRow;
 var keyword;
 var wordList;
 var overwriteFlg;
+var listcnt;

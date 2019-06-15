@@ -60,8 +60,13 @@ function helpView(){
     return;
 }
 
-function listView(){
-    var listMessage = listModel();
+function listAllView(){
+    var listAllMessage = listAllModel();
+    sendToDiscordModel(listAllMessage);
+    return;
+}
+function listDefaultView(){
+    var listMessage = listDefaultModel();
     sendToDiscordModel(listMessage);
     return;
 }
