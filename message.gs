@@ -18,3 +18,6 @@ var msNextWord = messageSheet.getRange("A16").getValue();
 var msDisplayCnt = messageSheet.getRange("A17").getValue(); 
 var msDisplayResultCnt = messageSheet.getRange("A18").getValue();
 var msListDefault = messageSheet.getRange("A19").getValue();
+var msFindWord = messageSheet.getRange("A20").getValue();
+var msNoFindWord = messageSheet.getRange("A21").getValue();
+var msFindCnt = messageSheet.getRange("A22").getValue();

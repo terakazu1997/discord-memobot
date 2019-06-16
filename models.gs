@@ -80,7 +80,6 @@ function removeModel(keyword){
     var rmword = keyword.slice(3)
     for(var i =0; i< wordList.length; i++){
         checkWord = wordList[i].toString();
-        checkWord = checkWord.replace(/,/g,'');
         if(checkWord === rmword){
             dictSheet.deleteRow(i+1);
             return rmword+msRemove;
@@ -98,7 +97,6 @@ function updateCheckModel(keyword){
     }
     for(var i =0; i< wordList.length; i++){
         checkWord = wordList[i].toString();
-        checkWord = checkWord.replace(/,/g,'');
         if(checkWord === upword){
             dictSheet.getRange("D2").setValue('U'+(i+1));
             return upword+msUpWord;
@@ -127,7 +125,6 @@ function wordMeanModel(keyword){
     var mean;
     for(var i =0; i< wordList.length; i++){
         checkWord = wordList[i].toString();
-        checkWord = checkWord.replace(/,/g,'');
         if(checkWord === keyword){
             mean = dictSheet.getRange(i+1, 3).getValue();
             return msWord+keyword+msMean+mean;
@@ -180,4 +177,29 @@ function listDefaultModel(){
     }
     dictSheet.getRange("D3").setValue(0);
     return words+String.fromCharCode(10)+displayNumber+msDisplayResultCnt;
+}
+
+//入力された文字列に含まれる全ての単語をViewに返す関数
+function findModel(){
+    var findWord = keyword.slice(5);
+    var findWords = findWord + msFindWord;
+    var findCnt = 0;
+    checkWord = "";
+    var cnt = 0;
+    for(var i = 2; i < wordList.length; i++){
+        checkWord = wordList[i].toString();
+        if(checkWord.match(findWord)){
+           cnt += strCount(checkWord)+4;
+           if(cnt >= 40){
+                findWords += String.fromCharCode(10);
+                cnt = strCount(wordList[i].toString()) + 4;
+           }
+          　　findCnt +=1;
+           findWords += '-'+ checkWord+"　";
+        }
+    }
+    if(findCnt === 0){
+        return  keyword.slice(5)+msNoFindWord;
+    }
+    return findWords +String.fromCharCode(10)+ findCnt + msFindCnt;
 }

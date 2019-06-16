@@ -64,6 +64,10 @@ function controller() {
         updateCheckView(keyword);
         return;
     }
+    if(keyword.slice(0,5) == "find "|| keyword.slice(0,5) == 'find　'){
+        findView(keyword);
+        return;
+    }
     if(wordMeanView(keyword)===true){
         return;
     }
