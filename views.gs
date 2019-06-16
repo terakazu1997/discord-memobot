@@ -70,3 +70,8 @@ function listDefaultView(){
     sendToDiscordModel(listMessage);
     return;
 }
+function findView(){
+  　　var findMessage = findModel();
+   sendToDiscordModel(findMessage);
+   return;
+}
