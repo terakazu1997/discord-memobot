@@ -23,3 +23,5 @@ var msNoFindWord = messageSheet.getRange("A21").getValue();
 var msFindCnt = messageSheet.getRange("A22").getValue();
 var msUpWord = messageSheet.getRange("A23").getValue();
 var msUpNewWord = messageSheet.getRange("A24").getValue();
+var msFindPromotion = messageSheet.getRange("A25").getValue();
+var msHelpPromotion = messageSheet.getRange("A26").getValue();

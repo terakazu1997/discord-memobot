@@ -43,9 +43,9 @@ function urlJudgeModel(keyword){
         keyword = keyword.slice(3);
         dictSheet.getRange(lastRow, 3).setValue(keyword);
         dictSheet.getRange("D2").setValue('F');
-        return dictSheet.getRange(lastRow,2).getValue()+msInsertUrl;
+        return dictSheet.getRange(lastRow,2).getValue()+msInsertUrl+msFindPromotion;
     }else {
-        return msNGUrl;
+        return msNGUrl+msFindPromotion;
     }
 }
 
@@ -57,7 +57,7 @@ function urlJudgeModel(keyword){
 function insertModel(keyword){
     dictSheet.getRange(lastRow, 3).setValue(keyword);
     dictSheet.getRange("D2").setValue('F');
-    return dictSheet.getRange(lastRow,2).getValue()+msInsertMean;
+    return dictSheet.getRange(lastRow,2).getValue()+msInsertMean+msFindPromotion;
 }
 
 /*Discordからスプレッドシートに追加された文字列の意味を更新する関数
@@ -70,11 +70,11 @@ function updateModel(keyword){
     if(overwriteFlg.slice(0,1) == "u" && dictSheet.getRange(upRow, 3).getValue() != ""){
         dictSheet.getRange(upRow, 2).setValue(keyword);
         dictSheet.getRange("D2").setValue('F');
-        return keyword+msUpNewWord;
+        return keyword+msUpNewWord+msFindPromotion;
     }
     dictSheet.getRange(upRow, 3).setValue(keyword);
     dictSheet.getRange("D2").setValue('F');
-    return dictSheet.getRange(upRow,2).getValue()+msUpNewMean;
+    return dictSheet.getRange(upRow,2).getValue()+msUpNewMean+msFindPromotion;
 }
 
 /*Discordからスプレッドシートに追加された文字列の単語が格納されている行を削除する関数
@@ -87,10 +87,10 @@ function removeModel(keyword){
         checkWord = wordList[i].toString();
         if(checkWord.toLowerCase() === rmword.toLowerCase()){
             dictSheet.deleteRow(i+1);
-            return checkWord+msRemove;
+            return checkWord+msRemove+msFindPromotion;
         }
     }
-    return rmword+msNoRemove;
+    return rmword+msNoRemove+msFindPromotion;
 }
 
 /*Discordからスプレッドシートに追加された文字列が更新対象か、更新対象じゃないか、新規登録対象かをチェックする関数
@@ -125,7 +125,7 @@ function updateCheckModel(keyword){
 */
 function insertCheckModel(keyword){
     if(keyword.length >= 39){
-        return msNoInsertWord;
+        return msNoInsertWord+msFindPromotion;
     }
     dictSheet.getRange(lastRow+1, 2).setValue(keyword);
     dictSheet.getRange(2,4).setValue('I');
@@ -141,7 +141,7 @@ function wordMeanModel(keyword){
         checkWord = wordList[i].toString();
         if(checkWord.toLowerCase() === keyword.toLowerCase()){
             mean = dictSheet.getRange(i+1, 3).getValue();
-            return msWord+checkWord+msMean+mean;
+            return msWord+checkWord+msMean+mean+msFindPromotion;
         }
     }
     return false;
@@ -213,7 +213,7 @@ function findModel(){
         }
     }
     if(findCnt === 0){
-        return  keyword.slice(5)+msNoFindWord;
+        return  keyword.slice(5)+msNoFindWord+msHelpPromotion ;
     }
-    return findWords +String.fromCharCode(10)+ findCnt + msFindCnt;
+    return findWords +String.fromCharCode(10)+ findCnt + msFindCnt+msHelpPromotion ;
 }
