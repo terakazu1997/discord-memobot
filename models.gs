@@ -82,12 +82,12 @@ function updateModel(keyword){
 *  2.Viewに削除した単語のメッセージを返す
 */
 function removeModel(keyword){
-    var rmword = keyword.slice(3)
+    var rmword = keyword.slice(3);
     for(var i =0; i< wordList.length; i++){
         checkWord = wordList[i].toString();
-        if(checkWord === rmword){
+        if(checkWord.toLowerCase() === rmword.toLowerCase()){
             dictSheet.deleteRow(i+1);
-            return rmword+msRemove;
+            return checkWord+msRemove;
         }
     }
     return rmword+msNoRemove;
@@ -103,13 +103,13 @@ function updateCheckModel(keyword){
     }
     for(var i =0; i< wordList.length; i++){
         checkWord = wordList[i].toString();
-        if(checkWord === upword || checkWord === optionUpword){
+        if(checkWord.toLowerCase() === upword.toLowerCase() || checkWord.toLowerCase() === optionUpword.toLowerCase()){
            if(keyword.slice(3,6)==='-w '){
               dictSheet.getRange("D2").setValue('u'+(i+1));
-              return optionUpword+msUpWord;
+              return checkWord+msUpWord;
             }
             dictSheet.getRange("D2").setValue('U'+(i+1));
-            return upword+msUpMean;
+            return checkWord+msUpMean;
         }
     }
     dictSheet.getRange("D2").setValue('U'+(i+1));
@@ -139,9 +139,9 @@ function wordMeanModel(keyword){
     var mean;
     for(var i =0; i< wordList.length; i++){
         checkWord = wordList[i].toString();
-        if(checkWord === keyword){
+        if(checkWord.toLowerCase() === keyword.toLowerCase()){
             mean = dictSheet.getRange(i+1, 3).getValue();
-            return msWord+keyword+msMean+mean;
+            return msWord+checkWord+msMean+mean;
         }
     }
     return false;
@@ -202,7 +202,7 @@ function findModel(){
     var cnt = 0;
     for(var i = 2; i < wordList.length; i++){
         checkWord = wordList[i].toString();
-        if(checkWord.match(findWord)){
+        if(checkWord.toLowerCase().match(findWord.toLowerCase())){
            cnt += strCount(checkWord)+4;
            if(cnt >= 40){
                 findWords += String.fromCharCode(10);

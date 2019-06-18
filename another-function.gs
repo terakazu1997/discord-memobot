@@ -12,8 +12,11 @@ function keywordSplit(keyword){
         return "url"+keyword;
     }
     if(keyword.length > 1000){
-       keyword = keyword.slice(0,1000);
+        keyword = keyword.slice(0,1000);
     }
+    keyword.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {
+        return String.fromCharCode(s.charCodeAt(0) - 65248);
+    });
     var ranges = [
         '\ud83c[\udf00-\udfff]',
         '\ud83d[\udc00-\udeff]',
