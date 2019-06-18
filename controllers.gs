@@ -40,7 +40,7 @@ function controller() {
         insertView(keyword);
         return;
     }
-    if(overwriteFlg.slice(0,1) == "U"){
+    if(overwriteFlg.slice(0,1) == "U" || overwriteFlg.slice(0,1) == "u"){
         updateView(keyword);
         return;
     }
