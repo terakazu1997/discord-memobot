@@ -43,7 +43,7 @@ function urlJudgeModel(keyword){
         keyword = keyword.slice(3);
         dictSheet.getRange(lastRow, 3).setValue(keyword);
         dictSheet.getRange("D2").setValue('F');
-        return msWord+dictSheet.getRange(lastRow,2).getValue()+msInsertUrl+keyword;
+        return dictSheet.getRange(lastRow,2).getValue()+msInsertUrl;
     }else {
         return msNGUrl;
     }
@@ -57,7 +57,7 @@ function urlJudgeModel(keyword){
 function insertModel(keyword){
     dictSheet.getRange(lastRow, 3).setValue(keyword);
     dictSheet.getRange("D2").setValue('F');
-    return msWord+dictSheet.getRange(lastRow,2).getValue()+msInsertMean+keyword;
+    return dictSheet.getRange(lastRow,2).getValue()+msInsertMean;
 }
 
 /*Discordからスプレッドシートに追加された文字列の意味を更新する関数
@@ -67,9 +67,14 @@ function insertModel(keyword){
 */
 function updateModel(keyword){
     var upRow = overwriteFlg.slice(1);
+    if(overwriteFlg.slice(0,1) == "u" && dictSheet.getRange(upRow, 3).getValue() != ""){
+        dictSheet.getRange(upRow, 2).setValue(keyword);
+        dictSheet.getRange("D2").setValue('F');
+        return keyword+msUpNewWord;
+    }
     dictSheet.getRange(upRow, 3).setValue(keyword);
     dictSheet.getRange("D2").setValue('F');
-    return msWord+dictSheet.getRange(upRow,2).getValue()+msUpMean+keyword;
+    return dictSheet.getRange(upRow,2).getValue()+msUpNewMean;
 }
 
 /*Discordからスプレッドシートに追加された文字列の単語が格納されている行を削除する関数
@@ -92,17 +97,26 @@ function removeModel(keyword){
 */
 function updateCheckModel(keyword){
 　　　　　　　　var upword = keyword.slice(3);
+    var optionUpword = upword.slice(3);
     if(upword.length >= 39){
     　　　　　　　　return msNoUpWord;
     }
     for(var i =0; i< wordList.length; i++){
         checkWord = wordList[i].toString();
-        if(checkWord === upword){
+        if(checkWord === upword || checkWord === optionUpword){
+           if(keyword.slice(3,6)==='-w '){
+              dictSheet.getRange("D2").setValue('u'+(i+1));
+              return optionUpword+msUpWord;
+            }
             dictSheet.getRange("D2").setValue('U'+(i+1));
-            return upword+msUpWord;
+            return upword+msUpMean;
         }
     }
     dictSheet.getRange("D2").setValue('U'+(i+1));
+    if(keyword.slice(3,6)==='-w '){
+        dictSheet.getRange(i+1,2).setValue(optionUpword);
+        return optionUpword+msInsertWord;
+    }
     dictSheet.getRange(i+1,2).setValue(upword);
     return upword+msInsertWord;
 }
