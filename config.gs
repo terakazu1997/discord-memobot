@@ -3,6 +3,7 @@
 *
 * config.gs  
 */
+var infoSheet = SpreadsheetApp.getActive().getSheetByName('情報');
 var webhookUrl = infoSheet.getRange("A1").getValue();
 var token = infoSheet.getRange("A2").getValue();;
 var channelname　= infoSheet.getRange("A3").getValue();;

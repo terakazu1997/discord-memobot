@@ -9,7 +9,6 @@
 * models.gs 
 */
 
-
 //引数：Discordに送信するメッセージ 戻り値：なし　Discordへメモの各種機能を使用した結果を送信する関数
 function sendToDiscordModel(Message) {  
     //webhookurl
@@ -38,10 +37,10 @@ function sendToDiscordModel(Message) {
 *  単語として入力された場合：msNGUrl関数を返し、ViewにURLは単語として登録できないよーと旨のメッセージを返す。
 *　　　　意味として入力された場合：スプレッドシートに該当する単語の行にURLを設定し、Viewに登録が完了したよーという旨のメッセージを返す
 */
-function urlJudgeModel(keyword){
-    if(overwriteFlg == "I"){
-        keyword = keyword.slice(3);
-        dictSheet.getRange(lastRow, 3).setValue(keyword);
+function urlJudgeModel(){
+    if(operationFlag == "I"){
+        var urlword = keyword.slice(3);
+        dictSheet.getRange(lastRow, 3).setValue(urlword);
         dictSheet.getRange("D2").setValue('F');
         return dictSheet.getRange(lastRow,2).getValue()+msInsertUrl+msFindPromotion;
     }else {
@@ -54,7 +53,7 @@ function urlJudgeModel(keyword){
 *　　　　2.overWriteFlagを　Insert(I）→False(F)にする。
 *  3.Viewに追加した単語と意味のメッセージを返す
 */
-function insertModel(keyword){
+function insertModel(){
     dictSheet.getRange(lastRow, 3).setValue(keyword);
     dictSheet.getRange("D2").setValue('F');
     return dictSheet.getRange(lastRow,2).getValue()+msInsertMean+msFindPromotion;
@@ -65,23 +64,26 @@ function insertModel(keyword){
 *　　　　2.overWriteFlagを　Update(U）→False(F)にする。
 *  3.Viewに更新した単語と意味のメッセージを返す
 */
-function updateModel(keyword){
-    var upRow = overwriteFlg.slice(1);
-    if(overwriteFlg.slice(0,1) == "u" && dictSheet.getRange(upRow, 3).getValue() != ""){
-        dictSheet.getRange(upRow, 2).setValue(keyword);
-        dictSheet.getRange("D2").setValue('F');
+function updateModel(){
+    var targetCnt = dictSheet.getRange("D3").getValue();
+    dictSheet.getRange("D2").setValue('F');
+    dictSheet.getRange("D3").setValue(0);
+    if(operationFlag == "u"){
+        if(keyword.length >= 39){
+    　　　　　　　　    return msNoUpWord;
+        }
+        dictSheet.getRange(targetCnt, 2).setValue(keyword);
         return keyword+msUpNewWord+msFindPromotion;
     }
-    dictSheet.getRange(upRow, 3).setValue(keyword);
-    dictSheet.getRange("D2").setValue('F');
-    return dictSheet.getRange(upRow,2).getValue()+msUpNewMean+msFindPromotion;
+    dictSheet.getRange(targetCnt, 3).setValue(keyword);
+    return dictSheet.getRange(targetCnt,2).getValue()+msUpNewMean+msFindPromotion;
 }
 
 /*Discordからスプレッドシートに追加された文字列の単語が格納されている行を削除する関数
 *  1.削除対象行の削除をする
 *  2.Viewに削除した単語のメッセージを返す
 */
-function removeModel(keyword){
+function removeModel(){
     var rmword = keyword.slice(3);
     for(var i =0; i< wordList.length; i++){
         checkWord = wordList[i].toString();
@@ -93,37 +95,50 @@ function removeModel(keyword){
     return rmword+msNoRemove+msFindPromotion;
 }
 
-/*Discordからスプレッドシートに追加された文字列が更新対象か、更新対象じゃないか、新規登録対象かをチェックする関数
+/*
+* Discordからスプレッドシートに追加された文字列が単語か意味の更新対象か、、新規登録対象かをチェックする関数
+* 単語が登録済みかつ　入力値がup -w　{word}：単語更新対象
+* 単語が登録済みかつ入力値がup {word}:意味更新対象
+* 上記2つに当てはまらず39文字以上：文字数制限
+* その他：新規登録対象
+* Viewに各メッセージを返す。
 */
-function updateCheckModel(keyword){
+function updateCheckModel(){
 　　　　　　　　var upword = keyword.slice(3);
     var optionUpword = upword.slice(3);
-    if(upword.length >= 39){
-    　　　　　　　　return msNoUpWord;
-    }
     for(var i =0; i< wordList.length; i++){
         checkWord = wordList[i].toString();
         if(checkWord.toLowerCase() === upword.toLowerCase() || checkWord.toLowerCase() === optionUpword.toLowerCase()){
-           if(keyword.slice(3,6)==='-w '){
-              dictSheet.getRange("D2").setValue('u'+(i+1));
-              return checkWord+msUpWord;
+            dictSheet.getRange("D3").setValue(i+1); 
+            if(keyword.slice(3,6)==='-w '){
+                dictSheet.getRange("D2").setValue('u');
+                return checkWord+msUpWord;
             }
-            dictSheet.getRange("D2").setValue('U'+(i+1));
+            dictSheet.getRange("D2").setValue('U');
             return checkWord+msUpMean;
         }
     }
-    dictSheet.getRange("D2").setValue('U'+(i+1));
+    dictSheet.getRange("D2").setValue('I');
     if(keyword.slice(3,6)==='-w '){
+        if(optionUpword.length >= 39){
+    　　　　　　　　    return msNoUpWord;
+        }
         dictSheet.getRange(i+1,2).setValue(optionUpword);
         return optionUpword+msInsertWord;
+    }
+    if(upword.length >= 39){
+        return msNoUpWord;
     }
     dictSheet.getRange(i+1,2).setValue(upword);
     return upword+msInsertWord;
 }
 
-/*Discordからスプレッドシートに追加された文字列が追加対象か、追加対象じゃないかをチェックする関数
+/*
+* Discordからスプレッドシートに追加された文字列が追加対象か、追加対象じゃないかをチェックする関数
+* Viewに追加対象か追加対象でないかのメッセージを返す。
 */
-function insertCheckModel(keyword){
+function insertCheckModel(){
+    //39文字以上の単語は追加不可能
     if(keyword.length >= 39){
         return msNoInsertWord+msFindPromotion;
     }
@@ -134,7 +149,7 @@ function insertCheckModel(keyword){
 
 /*Discordからスプレッドシートに追加された文字列の単語が登録済みか、登録済みでないかを調べ登録済みなら単語と意味を返す関数
 */
-function wordMeanModel(keyword){
+function wordMeanModel(){
     var checkWord = "";
     var mean;
     for(var i =0; i< wordList.length; i++){
@@ -152,7 +167,11 @@ function helpModel(){
     return msHelp;
 }
 
-//単語の文字列をリストとして全件取得してViewに返す関数
+/*単語の文字列をリストとして全件取得してViewに返す関数
+*  小文字大文字の組み合わせが40になるたびに改行（毎回+4しているのは、-と　空白分の文字数)
+*  直近の単語から履歴表示したいからwordListの最大要素から取得
+* 　　全単語を表示してViewに返す
+*/
 function listAllModel(){
     var words = msList;
     words += '-'+wordList[wordList.length-1]+ "　";
@@ -170,15 +189,16 @@ function listAllModel(){
 
 //単語の文字列をリストとして最大50件取得してViewに返す関数
 function listDefaultModel(){
-    var displaycnt = listcnt*50;
-    var words = msListDefault+displaycnt+ "〜"+(displaycnt+50) +msDisplayCnt;
+    var listCnt = dictSheet.getRange("D3").getValue();
+    var displayCnt = listCnt*50;
+    var words = msListDefault+displayCnt+ "〜"+(displayCnt+50) +msDisplayCnt;
     var displayNumber = 1;
-    words += '-'+wordList[wordList.length-displaycnt-1]+ "　";
+    words += '-'+wordList[wordList.length-displayCnt-1]+ "　";
     var cnt = strCount(wordList[wordList.length-1].toString())+4;
-    for(var i = wordList.length-displaycnt-2; i > 1 ;i--){
+    for(var i = wordList.length-displayCnt-2; i > 1 ;i--){
         if(displayNumber == 50){
             dictSheet.getRange("D2").setValue('L');
-            dictSheet.getRange("D3").setValue(listcnt+1);
+            dictSheet.getRange("D3").setValue(listCnt+1);
             return words + msNextWord;
         }
         cnt += strCount(wordList[i].toString())+4;
@@ -193,12 +213,16 @@ function listDefaultModel(){
     return words+String.fromCharCode(10)+displayNumber+msDisplayResultCnt;
 }
 
-//入力された文字列に含まれる全ての単語をViewに返す関数
+/*入力された文字列に含まれる全ての単語をViewに返す関数
+*  見つかるたびに件数を１件追加
+*  1件もなければ、見つからなかったメッセージをViewに返す
+*  1件以上なら件数と、見つかった単語をViewに返す
+*/
 function findModel(){
     var findWord = keyword.slice(5);
     var findWords = findWord + msFindWord;
     var findCnt = 0;
-    checkWord = "";
+    var checkWord = "";
     var cnt = 0;
     for(var i = 2; i < wordList.length; i++){
         checkWord = wordList[i].toString();
