@@ -62,19 +62,28 @@ function insertAction(keyword){
     return;
 }
 
-/*Discordからスプレッドシートに追加された文字列の意味を更新する関数
-*  1.更新対象行に意味を登録する（operationFlagの2文字目以降から判断）
-*  2.operationFlagを　Update(U）→False(F)にする。
+/*Discordからスプレッドシートに追加された文字列の単語か意味を更新する関数
+*  1.更新対象行に単語か意味を登録する（更新対象業はtargetCnから判断）
+*  2.operationFlagを　Update(U）(u)→False(F)にする
 *  3.Discordに更新した単語と意味のメッセージを送信
+*  もし単語を更新する場合は、同一単語で更新できないようにする。
 */
-function updateAction(keyword,operationFlag){
+function updateAction(keyword,wordList,operationFlag){
     var targetCnt = dictSheet.getRange("D3").getValue();
+    var checkWord = "";
     dictSheet.getRange("D2").setValue('F');
     dictSheet.getRange("D3").setValue(0);
     if(operationFlag == "u"){
         if(keyword.length >= 39){
             sendToDiscordAction(msNoUpWord);
             return;
+        }
+        for(var i =0; i< wordList.length; i++){
+            checkWord = wordList[i].toString();
+            if(checkWord.toLowerCase() === keyword.toLowerCase()){
+                sendToDiscordAction(msExistsWord);
+                return;
+            }
         }
         dictSheet.getRange(targetCnt, 2).setValue(keyword);
         sendToDiscordAction(keyword+msUpNewWord+msFindPromotion);

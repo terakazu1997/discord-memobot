@@ -43,7 +43,7 @@ function controller() {
             return;
         case "U":
         case "u":
-            updateAction(keyword,operationFlag);
+            updateAction(keyword,wordList,operationFlag);
             return;
     }
     
