@@ -26,3 +26,5 @@ var msUpWord = messageSheet.getRange("A23").getValue();
 var msUpNewWord = messageSheet.getRange("A24").getValue();
 var msFindPromotion = messageSheet.getRange("A25").getValue();
 var msHelpPromotion = messageSheet.getRange("A26").getValue();
+var msCreateSheet = messageSheet.getRange("A27").getValue();
+var msExistsWord = messageSheet.getRange("A28").getValue();
