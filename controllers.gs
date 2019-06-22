@@ -1,31 +1,29 @@
 /**
-* MVCモデル、Controller層にあたるファイル　
+* 処理を振り分けるファイル
 *
-* View層に処理を委譲する。
-* 基本的に入力された単語の状態orスプレッドシートのoverwriteフラグの状態で呼び出すViewを変化させる。
+* 基本的に入力された単語の状態orスプレッドシートのoperatonFlagの状態で呼び出すactionを変化させる。
 *
 * controllers.gs 
 */
 
 function controller() {
-    lastRow = dictSheet.getLastRow();
-    wordList = dictSheet.getRange(1,2,lastRow).getValues();   
-    keyword=keywordSplit(dictSheet.getRange("A2").getValue());
+    var keyword=keywordSplit(dictSheet.getRange("A2").getValue());
+    var wordList = dictSheet.getRange(1,2,dictSheet.getLastRow()).getValues(); 
+    var operationFlag = dictSheet.getRange("D2").getValue();
     dictSheet.getRange(2, 1).clear();
-    operationFlag = dictSheet.getRange("D2").getValue();
     if(keyword === "")return;
     var targetCmd = keyword.slice(0,3);
     var findCmd = keyword.slice(0,5);
     
     //url判定
     if(targetCmd === "url" && operationFlag != "L"){
-        urlCheckView(keyword);
+        urlJudgeAction(keyword,operationFlag);
         return;
     }
     
     //入力値置換の結果""になっていないか判定
     if (keyword === "NGワード"){
-        sendToDiscordModel(msNoUseWord);
+        sendToDiscordAction(msNoUseWord);
         return;
     }
     
@@ -34,58 +32,55 @@ function controller() {
         //50件目以降のリストはnが入力された場合のみ次の50件を表示する。n以外が入力時は次の入力確認へ。
         case "L":  
             if(keyword === 'n'){
-                listDefaultView();
+                listDefaultAction(wordList);
                 return;
             }
             dictSheet.getRange("D2").setValue('F');
             dictSheet.getRange("D3").setValue(0);
             break;
         case "I":
-            insertView();
+            insertAction(keyword);
             return;
         case "U":
         case "u":
-            updateView();
+            updateAction(keyword,operationFlag);
             return;
     }
     
     //入力値判定 help(ヘルプ表示） list -a,ls -a(全件表示）list,　ls(0〜50件目までのリスト表示)　
     switch (keyword){
         case "help":
-            helpView();
+            helpAction();
             return;
         case "list -a":
         case "ls -a":
-            listAllView();
+            listAllAction(wordList);
             return;
         case "list":
         case "ls":
-            listDefaultView();
+            listDefaultAction(wordList);
             return;
     }
    
     //入力値判定2 前3文字がrm (削除）,　up (更新チェック)
     switch(targetCmd){
         case "rm ":
-            removeView();
+            removeAction(keyword,wordList);
             return;
         case "up ":
-            updateCheckView();
+            updateCheckAction(keyword,wordList);
             return;
     }
    
    //入力値判定3 前5文字がfind　(文字一致検索)
     if(findCmd == "find "){
-        findView();
+        findAction(keyword,wordList);
         return;
     }
    
-    //入力値判定4 入力された単語が存在する(単語の意味表示）
-    if(wordMeanView()===true){
+    //入力値判定4 入力された単語が存在しない(単語の追加チェック）　存在する（単語と意味表示）
+    if(wordMeanAction(keyword,wordList)===false){
+        insertCheckAction(keyword);
         return;
     }
-   
-    //追加チェック
-    insertCheckView();
-    return;
 }
