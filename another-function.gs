@@ -34,7 +34,7 @@ function keywordSplit(keyword){
     keyword = keyword.replace(ex, ''); //ここで削除
     keyword = keyword.replace(/　/,' ');
     if(keyword === ""){
-      return "NGワード"
+        return "NG"
     }
     return keyword;
 }
@@ -55,7 +55,7 @@ function strCount(str) {
             }    
         }
         if(HankakuFlg = true){
-         len += 3;
+            len += 3;
         }
     return len;
 }

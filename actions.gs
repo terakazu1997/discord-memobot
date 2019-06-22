@@ -73,7 +73,7 @@ function updateAction(keyword,operationFlag){
     dictSheet.getRange("D3").setValue(0);
     if(operationFlag == "u"){
         if(keyword.length >= 39){
-    　　　　　　　　    sendToDiscordAction(msNoUpWord);
+            sendToDiscordAction(msNoUpWord);
             return;
         }
         dictSheet.getRange(targetCnt, 2).setValue(keyword);
@@ -112,7 +112,7 @@ function removeAction(keyword,wordList){
 * Discordに各メッセージを送信。
 */
 function updateCheckAction(keyword,wordList){
-　　　　　　　　var upword = keyword.slice(3);
+    var upword = keyword.slice(3);
     var optionUpword = upword.slice(3);
     var checkWord = "";
     for(var i =0; i< wordList.length; i++){
@@ -132,7 +132,7 @@ function updateCheckAction(keyword,wordList){
     dictSheet.getRange("D2").setValue('I');
     if(keyword.slice(3,6)==='-w '){
         if(optionUpword.length >= 39){
-    　　　　　　　　    sendToDiscordAction(msNoUpWord);
+            sendToDiscordAction(msNoUpWord);
             return;
         }
         dictSheet.getRange(i+1,2).setValue(optionUpword);
@@ -254,7 +254,7 @@ function findAction(keyword,wordList){
                 findWords += String.fromCharCode(10);
                 cnt = strCount(wordList[i].toString()) + 4;
            }
-          　　findCnt +=1;
+           findCnt +=1;
            findWords += '-'+ checkWord+"　";
         }
     }
