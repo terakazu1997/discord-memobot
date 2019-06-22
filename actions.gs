@@ -35,7 +35,7 @@ function sendToDiscordAction(message) {
 
 /*Discordからスプレッドシートに追加されたURL文字列が単語として入力されたか意味として入力したかで処理を分岐させる関数
 *  単語として入力された場合：msNGUrl関数を返し、DiscordにURLは単語として登録できないよーと旨のメッセージを送信。
-*　　　　意味として入力された場合：スプレッドシートに該当する単語の行にURLを設定し、Discordに登録が完了したよーという旨のメッセージを送信
+*  意味として入力された場合：スプレッドシートに該当する単語の行にURLを設定し、Discordに登録が完了したよーという旨のメッセージを送信
 */
 function urlJudgeAction(keyword,operationFlag){
     if(operationFlag == "I" || operationFlag=="U"){
@@ -52,7 +52,7 @@ function urlJudgeAction(keyword,operationFlag){
 
 /*Discordからスプレッドシートに追加された文字列の意味を追加する関数
 *  1.スプレッドシートの最終行に意味を登録する（スプレッドシートに単語は最終行に登録されているため）
-*　　　　2.overWriteFlagを　Insert(I）→False(F)にする。
+*  2.operationFlagを　Insert(I）→False(F)にする。
 *  3.Discordに追加した単語と意味のメッセージを送信
 */
 function insertAction(keyword){
@@ -63,8 +63,8 @@ function insertAction(keyword){
 }
 
 /*Discordからスプレッドシートに追加された文字列の意味を更新する関数
-*  1.更新対象行に意味を登録する（overwriteFlagの2文字目以降から判断）
-*　　　　2.overWriteFlagを　Update(U）→False(F)にする。
+*  1.更新対象行に意味を登録する（operationFlagの2文字目以降から判断）
+*  2.operationFlagを　Update(U）→False(F)にする。
 *  3.Discordに更新した単語と意味のメッセージを送信
 */
 function updateAction(keyword,operationFlag){
@@ -164,11 +164,11 @@ function insertCheckAction(keyword){
     return;
 }
 
-/*Discordからスプレッドシートに追加された文字列の単語が登録済みか、登録済みでないかを調べ登録済みなら単語と意味を送信関数
+/*Discordからスプレッドシートに追加された文字列の単語が登録済みか、登録済みでないかを調べ登録済みなら単語と意味を送信する関数
 */
 function wordMeanAction(keyword,wordList){
     var checkWord = "";
-    var mean;
+    var mean = "";
     for(var i =0; i< wordList.length; i++){
         checkWord = wordList[i].toString();
         if(checkWord.toLowerCase() === keyword.toLowerCase()){
