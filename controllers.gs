@@ -22,7 +22,7 @@ function controller() {
     }
     
     //入力値置換の結果""になっていないか判定
-    if (keyword === "NGワード"){
+    if (keyword === "NG"){
         sendToDiscordAction(msNoUseWord);
         return;
     }
