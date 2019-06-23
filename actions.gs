@@ -195,19 +195,19 @@ function helpAction(){
 }
 
 /*単語の文字列をリストとして全件取得してDiscordに送信関数
-*  小文字大文字の組み合わせが28860になるたびに改行（毎回+1480しているのは、-と 空白分の文字数)
+*  小文字大文字の組み合わせが28860になるたびに改行（毎回+2183しているのは、-と 空白分の文字数)
 *  直近の単語から履歴表示したいからwordListの最大要素から取得
 *   全単語を表示してDiscordに送信
 */
 function listAllAction(wordList){
     var words = msList;
     words += '◇'+wordList[wordList.length-1]+ " ";
-    var cnt = strCount(wordList[wordList.length-1].toString())+1480;
+    var cnt = strCount(wordList[wordList.length-1].toString())+2183;
     for(var i = wordList.length-2; i > 1 ;i--){
-        cnt += strCount(wordList[i].toString())+1480;
+        cnt += strCount(wordList[i].toString())+2183;
         if(cnt >= 28860){
             words += String.fromCharCode(10);
-            cnt = strCount(wordList[i].toString())+1480;
+            cnt = strCount(wordList[i].toString())+2183;
         }
         words += '◇'+wordList[i] + " ";
     }
@@ -221,8 +221,8 @@ function listDefaultAction(wordList){
     var displayCnt = listCnt*50;
     var words = msListDefault+displayCnt+ "〜"+(displayCnt+50) +msDisplayCnt;
     var displayNumber = 1;
-    words += '◇'+wordList[wordList.length-displayCnt-1]+ " ";
-    var cnt = strCount(wordList[wordList.length-1].toString())+1480;
+    words += '▷'+wordList[wordList.length-displayCnt-1]+ " ";
+    var cnt = strCount(wordList[wordList.length-1].toString())+2183;
     for(var i = wordList.length-displayCnt-2; i > 1 ;i--){
         if(displayNumber == 50){
             dictSheet.getRange("D2").setValue('L');
@@ -230,12 +230,12 @@ function listDefaultAction(wordList){
             sendToDiscordAction(words + msNextWord);
             return;
         }
-        cnt += strCount(wordList[i].toString())+1480;
+        cnt += strCount(wordList[i].toString())+2183;
         if(cnt >= 28860){
             words += String.fromCharCode(10);
-            cnt = strCount(wordList[i].toString())+1480;
+            cnt = strCount(wordList[i].toString())+2183;
         }
-        words += '◇'+wordList[i] + " ";
+        words += '▷'+wordList[i] + " ";
         displayNumber += 1;
     }
     dictSheet.getRange("D3").setValue(0);
@@ -257,10 +257,10 @@ function findAction(keyword,wordList){
     for(var i = 2; i < wordList.length; i++){
         checkWord = wordList[i].toString();
         if(checkWord.toLowerCase().match(findWord.toLowerCase())){
-           cnt += strCount(checkWord)+1480;
+           cnt += strCount(checkWord)+2183;
            if(cnt > 28860){
                 findWords += String.fromCharCode(10);
-                cnt = strCount(wordList[i].toString())+1480;
+                cnt = strCount(wordList[i].toString())+2183;
            }
            findCnt +=1;
            findWords += '◇'+ checkWord+" ";
