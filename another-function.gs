@@ -39,23 +39,22 @@ function keywordSplit(keyword){
     return keyword;
 }
 
-
+/*Line一行の半角英語：39文字、半角数字37文字,全角文字20文字　最小公倍数28860
+* それぞれ、28860を39,37,20で割る
+*/
 function strCount(str) {
     var len = 0;
-    var HankakuFlg = false;
     str = str.split("");
     for (var i=0;i<str.length;i++) {
-        if (str[i].match(/[a-z0-9 ]/)){
-            // 半角
-            len++;
-            HankakuFlg = true
-            } else {
-                // 全角
-                len+=2;
-            }    
-        }
-        if(HankakuFlg = true){
-            len += 3;
-        }
-    return len;
+        if (str[i].match(/[a-z ]/)){
+            // 半角英語
+            len+=740;
+        } else if(str[i].match(/[0-9 ]/)) {
+            // 半角数字
+            len+=780;
+        } else{
+            len+=1443;
+        }   
+   }
+   return len;
 }

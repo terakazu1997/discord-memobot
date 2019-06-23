@@ -1,5 +1,5 @@
 /**
-* action（操作）のかたまりにあたるファイル　
+* action（操作）のかたまりにあたるファイル 
 *
 * Discordから関数を要求されて、基本的には下記3処理を行う
 * 1.sendToDiscordはDiscordにメッセージ送信する
@@ -8,12 +8,12 @@
 *
 * Actions.gs 
 */
-
-//引数：Discordに送信するメッセージ 戻り値：なし　Discordへメモの各種機能を使用した結果を送信する関数
+var checkWord = "";
+//引数：Discordに送信するメッセージ 戻り値：なし Discordへメモの各種機能を使用した結果を送信する関数
 function sendToDiscordAction(message) {  
     //webhookurl
     var url = webhookUrl; 
-    //データを設定（token,チャンネル名、メッセージ、　ユーザ名（memobot）)
+    //データを設定（token,チャンネル名、メッセージ、 ユーザ名（memobot）)
     var data = {  
         'token' : token,
         "channel" : channelname,
@@ -52,7 +52,7 @@ function urlJudgeAction(keyword,operationFlag){
 
 /*Discordからスプレッドシートに追加された文字列の意味を追加する関数
 *  1.スプレッドシートの最終行に意味を登録する（スプレッドシートに単語は最終行に登録されているため）
-*  2.operationFlagを　Insert(I）→False(F)にする。
+*  2.operationFlagを Insert(I）→False(F)にする。
 *  3.Discordに追加した単語と意味のメッセージを送信
 */
 function insertAction(keyword){
@@ -63,18 +63,17 @@ function insertAction(keyword){
 }
 
 /*Discordからスプレッドシートに追加された文字列の単語か意味を更新する関数
-*  1.更新対象行に単語か意味を登録する（更新対象業はtargetCnから判断）
-*  2.operationFlagを　Update(U）(u)→False(F)にする
+*  1.更新対象行に単語か意味を登録する（更新対象業はtargetCntから判断）
+*  2.operationFlagを Update(U）(u)→False(F)にする
 *  3.Discordに更新した単語と意味のメッセージを送信
 *  もし単語を更新する場合は、同一単語で更新できないようにする。
 */
 function updateAction(keyword,wordList,operationFlag){
     var targetCnt = dictSheet.getRange("D3").getValue();
-    var checkWord = "";
     dictSheet.getRange("D2").setValue('F');
     dictSheet.getRange("D3").setValue(0);
     if(operationFlag == "u"){
-        if(keyword.length >= 39){
+        if(keyword.length >= 20){
             sendToDiscordAction(msNoUpWord);
             return;
         }
@@ -114,16 +113,16 @@ function removeAction(keyword,wordList){
 
 /*
 * Discordからスプレッドシートに追加された文字列が単語か意味の更新対象か、、新規登録対象かをチェックする関数
-* 単語が登録済みかつ　入力値がup -w　{word}：単語更新対象
+* 単語が登録済みかつ 入力値がup -w {word}：単語更新対象
 * 単語が登録済みかつ入力値がup {word}:意味更新対象
-* 上記2つに当てはまらず39文字以上：文字数制限
+* 上記2つに当てはまらず20文字以上：文字数制限
 * その他：新規登録対象
 * Discordに各メッセージを送信。
 */
 function updateCheckAction(keyword,wordList){
     var upword = keyword.slice(3);
     var optionUpword = upword.slice(3);
-    var checkWord = "";
+    
     for(var i =0; i< wordList.length; i++){
         checkWord = wordList[i].toString();
         if(checkWord.toLowerCase() === upword.toLowerCase() || checkWord.toLowerCase() === optionUpword.toLowerCase()){
@@ -140,7 +139,7 @@ function updateCheckAction(keyword,wordList){
     }
     dictSheet.getRange("D2").setValue('I');
     if(keyword.slice(3,6)==='-w '){
-        if(optionUpword.length >= 39){
+        if(optionUpword.length >= 20){
             sendToDiscordAction(msNoUpWord);
             return;
         }
@@ -148,7 +147,7 @@ function updateCheckAction(keyword,wordList){
         sendToDiscordAction(optionUpword+msInsertWord);
         return;
     }
-    if(upword.length >= 39){
+    if(upword.length >= 20){
         sendToDiscordAction(msNoUpWord);
         return;
     }
@@ -162,8 +161,8 @@ function updateCheckAction(keyword,wordList){
 * Discordに追加対象か追加対象でないかのメッセージを送信。
 */
 function insertCheckAction(keyword){
-    //39文字以上の単語は追加不可能
-    if(keyword.length >= 39){
+    //20文字以上の単語は追加不可能
+    if(keyword.length >= 20){
         sendToDiscordAction(msNoInsertWord+msFindPromotion);
         return;
     }
@@ -176,7 +175,7 @@ function insertCheckAction(keyword){
 /*Discordからスプレッドシートに追加された文字列の単語が登録済みか、登録済みでないかを調べ登録済みなら単語と意味を送信する関数
 */
 function wordMeanAction(keyword,wordList){
-    var checkWord = "";
+    
     var mean = "";
     for(var i =0; i< wordList.length; i++){
         checkWord = wordList[i].toString();
@@ -196,21 +195,21 @@ function helpAction(){
 }
 
 /*単語の文字列をリストとして全件取得してDiscordに送信関数
-*  小文字大文字の組み合わせが40になるたびに改行（毎回+4しているのは、-と　空白分の文字数)
+*  小文字大文字の組み合わせが28860になるたびに改行（毎回+1480しているのは、-と 空白分の文字数)
 *  直近の単語から履歴表示したいからwordListの最大要素から取得
-* 　　全単語を表示してDiscordに送信
+*   全単語を表示してDiscordに送信
 */
 function listAllAction(wordList){
     var words = msList;
-    words += '-'+wordList[wordList.length-1]+ "　";
-    var cnt = strCount(wordList[wordList.length-1].toString())+4;
+    words += '-'+wordList[wordList.length-1]+ " ";
+    var cnt = strCount(wordList[wordList.length-1].toString())+1480;
     for(var i = wordList.length-2; i > 1 ;i--){
-        cnt += strCount(wordList[i].toString())+4;
-        if(cnt >= 40){
+        cnt += strCount(wordList[i].toString())+1480;
+        if(cnt >= 28860){
             words += String.fromCharCode(10);
-            cnt = strCount(wordList[i].toString()) + 4;
+            cnt = strCount(wordList[i].toString())+1480;
         }
-        words += '-'+wordList[i] + "　";
+        words += '-'+wordList[i] + " ";
     }
     sendToDiscordAction(words);
     return;
@@ -222,8 +221,8 @@ function listDefaultAction(wordList){
     var displayCnt = listCnt*50;
     var words = msListDefault+displayCnt+ "〜"+(displayCnt+50) +msDisplayCnt;
     var displayNumber = 1;
-    words += '-'+wordList[wordList.length-displayCnt-1]+ "　";
-    var cnt = strCount(wordList[wordList.length-1].toString())+4;
+    words += '-'+wordList[wordList.length-displayCnt-1]+ " ";
+    var cnt = strCount(wordList[wordList.length-1].toString())+1480;
     for(var i = wordList.length-displayCnt-2; i > 1 ;i--){
         if(displayNumber == 50){
             dictSheet.getRange("D2").setValue('L');
@@ -231,12 +230,12 @@ function listDefaultAction(wordList){
             sendToDiscordAction(words + msNextWord);
             return;
         }
-        cnt += strCount(wordList[i].toString())+4;
-        if(cnt >= 40){
+        cnt += strCount(wordList[i].toString())+1480;
+        if(cnt >= 28860){
             words += String.fromCharCode(10);
-            cnt = strCount(wordList[i].toString()) + 4;
+            cnt = strCount(wordList[i].toString())+1480;
         }
-        words += '-'+wordList[i] + "　";
+        words += '-'+wordList[i] + " ";
         displayNumber += 1;
     }
     dictSheet.getRange("D3").setValue(0);
@@ -253,18 +252,18 @@ function findAction(keyword,wordList){
     var findWord = keyword.slice(5);
     var findWords = findWord + msFindWord;
     var findCnt = 0;
-    var checkWord = "";
+    
     var cnt = 0;
     for(var i = 2; i < wordList.length; i++){
         checkWord = wordList[i].toString();
         if(checkWord.toLowerCase().match(findWord.toLowerCase())){
-           cnt += strCount(checkWord)+4;
-           if(cnt >= 40){
+           cnt += strCount(checkWord)+1480;
+           if(cnt > 28860){
                 findWords += String.fromCharCode(10);
-                cnt = strCount(wordList[i].toString()) + 4;
+                cnt = strCount(wordList[i].toString())+1480;
            }
            findCnt +=1;
-           findWords += '-'+ checkWord+"　";
+           findWords += '◇'+ checkWord+" ";
         }
     }
     if(findCnt === 0){
