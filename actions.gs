@@ -201,7 +201,7 @@ function helpAction(){
 */
 function listAllAction(wordList){
     var words = msList;
-    words += '▷'+wordList[wordList.length-1]+ " ";
+    words += '▶︎'+wordList[wordList.length-1]+ " ";
     var cnt = strCount(wordList[wordList.length-1].toString())+2183;
     for(var i = wordList.length-2; i > 1 ;i--){
         cnt += strCount(wordList[i].toString())+2183;
@@ -209,7 +209,7 @@ function listAllAction(wordList){
             words += String.fromCharCode(10);
             cnt = strCount(wordList[i].toString())+2183;
         }
-        words += '▷'+wordList[i] + " ";
+        words += '▶︎'+wordList[i] + " ";
     }
     sendToDiscordAction(words);
     return;
@@ -221,7 +221,7 @@ function listDefaultAction(wordList){
     var displayCnt = listCnt*50;
     var words = msListDefault+displayCnt+ "〜"+(displayCnt+50) +msDisplayCnt;
     var displayNumber = 1;
-    words += '▷'+wordList[wordList.length-displayCnt-1]+ " ";
+    words += '▶︎'+wordList[wordList.length-displayCnt-1]+ " ";
     var cnt = strCount(wordList[wordList.length-1].toString())+2183;
     for(var i = wordList.length-displayCnt-2; i > 1 ;i--){
         if(displayNumber == 50){
@@ -235,7 +235,7 @@ function listDefaultAction(wordList){
             words += String.fromCharCode(10);
             cnt = strCount(wordList[i].toString())+2183;
         }
-        words += '▷'+wordList[i] + " ";
+        words += '▶︎'+wordList[i] + " ";
         displayNumber += 1;
     }
     dictSheet.getRange("D3").setValue(0);
@@ -263,7 +263,7 @@ function findAction(keyword,wordList){
                 cnt = strCount(wordList[i].toString())+2183;
            }
            findCnt +=1;
-           findWords += '▷'+ checkWord+" ";
+           findWords += '▶︎'+ checkWord+" ";
         }
     }
     if(findCnt === 0){
