@@ -7,7 +7,7 @@
 */
 
 function controller() {
-    var keyword=keywordSplit(dictSheet.getRange("A2").getValue());
+    var keyword=dictSheet.getRange("A2").getValue();
     var wordList = dictSheet.getRange(1,2,dictSheet.getLastRow()).getValues(); 
     var operationFlag = dictSheet.getRange("D2").getValue();
     dictSheet.getRange(2, 1).clear();
@@ -22,7 +22,7 @@ function controller() {
     }
     
     //入力値置換の結果""になっていないか判定
-    if (keyword === "NG"){
+    if (keywordSplit(keyword) === "NG"){
         sendToDiscordAction(msNoUseWord);
         return;
     }

@@ -137,12 +137,12 @@ function updateCheckAction(keyword,wordList){
             return;
         }
     }
-    dictSheet.getRange("D2").setValue('I');
     if(keyword.slice(3,6)==='-w '){
         if(optionUpword.length >= 20){
             sendToDiscordAction(msNoUpWord);
             return;
         }
+        dictSheet.getRange("D2").setValue('I');
         dictSheet.getRange(i+1,2).setValue(optionUpword);
         sendToDiscordAction(optionUpword+msInsertWord);
         return;
@@ -151,6 +151,7 @@ function updateCheckAction(keyword,wordList){
         sendToDiscordAction(msNoUpWord);
         return;
     }
+    dictSheet.getRange("D2").setValue('I');
     dictSheet.getRange(i+1,2).setValue(upword);
     sendToDiscordAction(upword+msInsertWord);
     return;
