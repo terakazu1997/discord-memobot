@@ -239,6 +239,7 @@ function listDefaultAction(wordList){
         words += '▶︎'+wordList[i] + " ";
         displayNumber += 1;
     }
+    dictSheet.getRange("D2").setValue('F');
     dictSheet.getRange("D3").setValue(0);
     sendToDiscordAction(words+String.fromCharCode(10)+displayNumber+msDisplayResultCnt);
     return;
